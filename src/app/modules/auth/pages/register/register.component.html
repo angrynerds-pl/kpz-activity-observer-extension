@@ -1,1 +1,73 @@
-<p>register works!</p>
+<div class="auth" @fadeIn @fadeOut>
+  <div class="auth__header">
+    <div class="auth__header__title">Rejestracja</div>
+  </div>
+  <div class="auth__body">
+    <div class="auth__form">
+      <form #form [formGroup]="registerForm" (ngSubmit)="submit()">
+        <div class="auth__form__controls">
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.name.field"
+              [formGroup]="registerForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.name"
+            >
+            </app-input>
+          </div>
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.surname.field"
+              [formGroup]="registerForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.surname"
+            >
+            </app-input>
+          </div>
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.email.field"
+              [formGroup]="registerForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.email"
+            >
+            </app-input>
+          </div>
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.password.field"
+              [formGroup]="registerForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.password"
+            >
+            </app-input>
+          </div>
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.confirmPassword.field"
+              [formGroup]="registerForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.confirmPassword"
+            >
+            </app-input>
+          </div>
+        </div>
+        <div class="auth__form__actions">
+          <app-button
+            class="auth__form__actions__item"
+            type="submit"
+            [pending]="pending"
+            icon="fas fa-sign-in-alt"
+            label="Zarejestruj"
+          >
+          </app-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
