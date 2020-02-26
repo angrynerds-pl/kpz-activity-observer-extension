@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+@import "variables";
+
+@include mat-core();
+$ww-app-primary: mat-palette($color-primary);
+$ww-app-accent: mat-palette($color-accent);
+$ww-app-warn: mat-palette($mat-deep-orange);
+$ww-app-theme: mat-dark-theme($ww-app-primary, $ww-app-accent, $ww-app-warn);
+@include angular-material-theme($ww-app-theme);
+@include mat-card-theme($ww-app-theme);

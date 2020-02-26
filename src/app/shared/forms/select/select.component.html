@@ -1,0 +1,11 @@
+<div class="select-container" [ngClass]="{'disabled': disabled}" [formGroup]="formGroup">
+  <mat-form-field class="input" color="primary" appearance="outline" [hideRequiredMarker]="false">
+    <mat-label>{{ options?.label }}</mat-label>
+    <mat-select [formControlName]="formControlNameValue" [required]="isRequired">
+      <mat-option *ngFor="let item of options?.availableOptions" [value]="item">
+        {{ item }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.required">To pole jest wymagane</mat-error>
+  </mat-form-field>
+</div>

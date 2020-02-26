@@ -1,0 +1,16 @@
+<div class="menu">
+  <app-button class="menu__item"
+              buttonType="mat-button"
+              label="Check"
+              (click)="click()">
+  </app-button>
+  <app-button class="menu__item"
+              buttonType="mat-button"
+              label="Statistics"
+              [routerLink]="['/app', 'statistics']">
+  </app-button>
+  <app-button class="menu__item"
+              buttonType="mat-button"
+              label="Settings">
+  </app-button>
+</div>

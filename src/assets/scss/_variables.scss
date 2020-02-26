@@ -1,0 +1,121 @@
+// Breakpoints:
+$breakpoint-xs: 400px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Colors:
+$color-text: #fafafa;
+$color-placeholder: #dedede;
+$color-white: #fff;
+$color-black: #000;
+
+$color-success: #5cb85c;
+$color-warning: #f0ad4e;
+$color-danger: #d9534f;
+$color-info: #5bc0de;
+
+$color-invalid: #ff5722;
+
+$color-gray: (
+  50 : #e9e9e9,
+  100 : #c8c8c8,
+  200 : #a4a4a4,
+  300 : #7f7f7f,
+  400 : #636363,
+  500 : #484848,
+  600 : #414141,
+  700 : #383838,
+  800 : #303030,
+  900 : #212121,
+  A100 : #f17d7d,
+  A200 : #eb4f4f,
+  A400 : #ff0808,
+  A700 : #ee0000,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$color-primary: (
+  50 : #e6e5ee,
+  100 : #c0bdd4,
+  200 : #9692b7,
+  300 : #6b669a,
+  400 : #4c4585,
+  500 : #2c246f,
+  600 : #272067,
+  700 : #211b5c,
+  800 : #1b1652,
+  900 : #100d40,
+  A100 : #807aff,
+  A200 : #4f47ff,
+  A400 : #1e14ff,
+  A700 : #0c00f9,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$color-accent: (
+  50 : #fdf0ea,
+  100 : #f9d8cb,
+  200 : #f5bfa9,
+  300 : #f1a587,
+  400 : #ee916d,
+  500 : #eb7e53,
+  600 : #e9764c,
+  700 : #e56b42,
+  800 : #e26139,
+  900 : #dd4e29,
+  A100 : #ffffff,
+  A200 : #ffece8,
+  A400 : #ffc3b5,
+  A700 : #ffae9c,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+@import '~@angular/material/theming';
+@include mat-core();

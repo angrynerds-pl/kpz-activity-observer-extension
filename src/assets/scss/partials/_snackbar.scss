@@ -1,0 +1,43 @@
+@import "variables";
+
+$alertTypes: success, warning, danger, info;
+
+@mixin snackbar-content($color) {
+  background-color: lighten($color, 10%);
+  color: darken($color, 30%);
+  border-left-color: $color;
+}
+
+@mixin snackbar($type) {
+  @if $type == success {
+    @include snackbar-content($color-success);
+  }
+  @if $type == warning {
+    @include snackbar-content($color-warning);
+  }
+  @if $type == danger {
+    @include snackbar-content($color-danger);
+  }
+  @if $type == info {
+    @include snackbar-content($color-info);
+  }
+}
+
+.mat-snack-bar-container {
+  background-color: $color-black;
+  border: 1px solid lightgray;
+  border-left: 3px solid mat-color($color-primary, 500);
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, .1);
+  color: $color-text;
+
+  .mat-simple-snackbar {
+    font: 500 15px/24px Roboto, "Helvetica Neue", sans-serif;
+    justify-content: center;
+  }
+
+  @each $alertType in $alertTypes {
+    &.#{$alertType} {
+      @include snackbar($alertType);
+    }
+  }
+}

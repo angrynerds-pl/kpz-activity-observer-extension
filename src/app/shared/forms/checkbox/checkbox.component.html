@@ -1,0 +1,10 @@
+<div class="checkbox-container" [ngClass]="{'disabled': disabled}" [formGroup]="formGroup">
+  <mat-checkbox
+    class="checkbox"
+    color="primary"
+    [class.invalid]="invalid"
+    [formControlName]="formControlNameValue"
+    [labelPosition]="labelPosition">
+    <span [innerHTML]="options.label"></span><span class="text-danger ml-4" *ngIf="required">*</span>
+  </mat-checkbox>
+</div>

@@ -1,0 +1,47 @@
+@import "variables";
+
+* {
+  font-family: 'Raleway', sans-serif;
+}
+
+a {
+  color: $color-text;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:visited {
+    color: $color-text;
+  }
+}
+
+b {
+  font-weight: 600;
+}
+
+.text-primary {
+  color: mat-color($color-primary, 500) !important;
+}
+
+.text-accent {
+  color: mat-color($color-accent, 500) !important;
+}
+
+.text-success {
+  color: $color-success !important;
+}
+
+.text-danger {
+  color: $color-danger !important;
+}
+
+.text-warning {
+  color: $color-warning !important;
+}
+
+.text-info {
+  color: $color-info !important;
+}
+
+.text-secondary {
+  color: #6c757d !important;
+}

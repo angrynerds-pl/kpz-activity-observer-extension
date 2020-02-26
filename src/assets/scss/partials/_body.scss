@@ -1,0 +1,7 @@
+@import "variables";
+
+body {
+  background-color: mat-color($color-primary, 500);
+  color: $color-text;
+  margin: 0;
+}

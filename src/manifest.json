@@ -1,0 +1,21 @@
+{
+  "name": "Work Watcher",
+  "version": "1.0",
+  "description": "We always watching you..",
+  "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": [
+      "background-es5.js",
+      "runtime-es5.js"
+    ]
+  },
+  "browser_action": {
+    "default_popup": "index.html"
+  }
+}

@@ -1,0 +1,111 @@
+@import "variables";
+
+.divider {
+  border-top: 1px dashed lightgray;
+  margin: 16px 0;
+  width: 100%;
+
+  &.solid {
+    border-style: solid;
+  }
+}
+
+.form-row {
+  margin-bottom: 16px;
+  position: relative;
+  float: left;
+  width: 100%;
+}
+
+.form-report {
+  width: 100%;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-radio-label {
+  white-space: normal !important;
+}
+
+.input {
+  width: 100%;
+
+  input {
+    font-size: 14px;
+  }
+}
+
+.mat-form-field-appearance-outline {
+
+  .mat-form-field-outline {
+    color: $color-text;
+  }
+
+  .mat-form-field-infix {
+    padding: 6px 4px 12px 4px !important;
+  }
+
+  &.mat-form-field-type-mat-select {
+
+    .mat-form-field-infix {
+      padding: 6px 4px 11px 4px !important;
+    }
+  }
+
+  .mat-form-field-label-wrapper {
+    overflow: visible;
+
+    .mat-form-field-label {
+      color: $color-text;
+      top: 50%;
+    }
+  }
+}
+
+.mat-select {
+
+  .mat-select-trigger {
+    align-items: center;
+    display: flex;
+
+    .mat-select-value {
+      max-width: unset;
+      flex-grow: 1;
+    }
+  }
+}
+
+.checkbox {
+
+  .mat-checkbox-inner-container {
+    transform: translateY(4px);
+    margin: 0 8px 0 0;
+  }
+
+  .mat-checkbox-label {
+    white-space: normal;
+    font-size: 12px;
+  }
+
+  &.invalid {
+
+    .mat-checkbox-frame {
+      border-color: $color-invalid;
+    }
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.mat-form-field-appearance-standard .mat-form-field-wrapper .mat-form-field-flex {
+  padding-top: 0;
+}
+
+.mat-form-field-required-marker {
+  color: $color-danger;
+}

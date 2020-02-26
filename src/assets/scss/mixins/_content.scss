@@ -1,0 +1,20 @@
+@import "variables";
+
+@mixin page() {
+  min-height: 84vh;
+}
+
+@mixin header() {
+  color: mat-color($color-primary, 500);
+  margin-bottom: 8px;
+  font-size: 20px;
+  line-height: 2;
+}
+
+@mixin content($margin: 0 auto, $padding: 0 0.9375rem 24px 0.9375rem) {
+  animation: fadeIn .5s;
+  max-width: 78.75rem;
+  padding: $padding;
+  margin: $margin;
+  flex-grow: 1;
+}

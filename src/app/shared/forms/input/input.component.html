@@ -1,0 +1,24 @@
+<div class="input-container" [ngClass]="{'disabled': disabled}" [formGroup]="formGroup">
+  <mat-form-field class="input" color="accent" appearance="outline" [hideRequiredMarker]="false">
+    <mat-label>{{ options.label ? options.label : '' }}</mat-label>
+    <input matInput
+           type="{{ options.type ? options.type : 'text' }}"
+           placeholder="{{ options.placeholder ? options.placeholder : '' }}"
+           [autofocus]="autofocus"
+           [formControlName]="formControlNameValue"
+           [required]="isRequired"
+           autocomplete="off">
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.required">To pole jest wymagane</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.email">Niepoprawny format email</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.min">Wartość za mała</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.max">Wartość za duża</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.minlength">Wartość za krótka</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.maxlength">Wartość za długa</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.notEquivalent">Wartości nie pasują do siebie</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.alreadyAdded">Konto z adresem email już istnieje</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.passwordMismatch">Hasła nie pasują do siebie</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.usernameTaken">Ta nazwa użytkownika jest już zajęta</mat-error>
+  </mat-form-field>
+  <!-- {{formSubmitted}}  -->
+  <!-- {{formGroup.controls[formControlNameValue].errors | json}}  -->
+</div>

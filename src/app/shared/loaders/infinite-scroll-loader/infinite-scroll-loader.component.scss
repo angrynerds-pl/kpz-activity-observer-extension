@@ -1,0 +1,14 @@
+@import "variables";
+
+.loader {
+  height: 180px;
+  width: 100%;
+
+  &__content {
+    justify-content: center;
+    animation: fadeIn 0.5s;
+    align-items: center;
+    display: flex;
+    height: 100%;
+  }
+}

@@ -1,0 +1,220 @@
+@import "variables";
+
+$breakpoints: xs, sm, md, lg, xl;
+$sizes: 1, 2, 3, 4, 5, 6;
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 15px;
+  width: 80%;
+}
+
+@mixin break-at($breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (max-width: $breakpoint-xs + 1px) {
+      flex-direction: column;
+    }
+  }
+  @if $breakpoint == sm {
+    @media screen and (max-width: $breakpoint-sm + 1px) {
+      flex-direction: column;
+    }
+  }
+  @if $breakpoint == md {
+    @media screen and (max-width: $breakpoint-md + 1px) {
+      flex-direction: column;
+    }
+  }
+  @if $breakpoint == lg {
+    @media screen and (max-width: $breakpoint-lg + 1px) {
+      flex-direction: column;
+    }
+  }
+  @if $breakpoint == xl {
+    @media screen and (max-width: $breakpoint-xl + 1px) {
+      flex-direction: column;
+    }
+  }
+}
+.row {
+  align-content: stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  width: 100%;
+
+  &.no-wrap {
+    flex-wrap: nowrap;
+  }
+
+  @each $breakpoint in $breakpoints {
+    &.break-at-#{$breakpoint} {
+      @include break-at(#{$breakpoint})
+    }
+  }
+}
+
+.column {
+  flex-direction: column;
+  display: flex;
+  width: 100%;
+}
+
+@mixin split($width, $breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (min-width: $breakpoint-xs - 1px) {
+      flex: 0 1 $width;
+    }
+  }
+  @if $breakpoint == sm {
+    @media screen and (min-width: $breakpoint-sm - 1px) {
+      flex: 0 1 $width;
+    }
+  }
+  @if $breakpoint == md {
+    @media screen and (min-width: $breakpoint-md - 1px) {
+      flex: 0 1 $width;
+    }
+  }
+  @if $breakpoint == lg {
+    @media screen and (min-width: $breakpoint-lg - 1px) {
+      flex: 0 1 $width;
+    }
+  }
+  @if $breakpoint == xl {
+    @media screen and (min-width: $breakpoint-xl - 1px) {
+      flex: 0 1 $width;
+    }
+  }
+}
+@each $size in $sizes {
+  .split-xs-#{$size} {
+    @include split(calc(100% / #{$size}), xs)
+  }
+
+  .split-sm-#{$size} {
+    @include split(calc(100% / #{$size}), sm)
+  }
+
+  .split-md-#{$size} {
+    @include split(calc(100% / #{$size}), md)
+  }
+
+  .split-lg-#{$size} {
+    @include split(calc(100% / #{$size}), lg)
+  }
+
+  .split-xl-#{$size} {
+    @include split(calc(100% / #{$size}), xl)
+  }
+}
+
+@mixin flex($flex-grow) {
+  flex: $flex-grow 1 0;
+}
+@each $size in $sizes {
+  .flex-#{$size} {
+    @include flex(#{$size})
+  }
+}
+
+@mixin hidden($breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (max-width: $breakpoint-xs - 1px) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == sm {
+    @media screen and (max-width: $breakpoint-sm - 1px) and (min-width: $breakpoint-xs) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == md {
+    @media screen and (max-width: $breakpoint-md - 1px) and (min-width: $breakpoint-sm) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == lg {
+    @media screen and (max-width: $breakpoint-lg - 1px) and (min-width: $breakpoint-md) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == xl {
+    @media screen and (max-width: $breakpoint-xl - 1px) and (min-width: $breakpoint-lg) {
+      display: none !important;
+    }
+  }
+}
+@mixin hidden-and-more($breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (min-width: $breakpoint-xs) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == sm {
+    @media screen and (min-width: $breakpoint-sm) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == md {
+    @media screen and (min-width: $breakpoint-md) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == lg {
+    @media screen and (min-width: $breakpoint-lg) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == xl {
+    @media screen and (min-width: $breakpoint-xl) {
+      display: none !important;
+    }
+  }
+}
+@mixin hidden-and-less($breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (max-width: $breakpoint-xs - 1px) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == sm {
+    @media screen and (max-width: $breakpoint-sm - 1px) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == md {
+    @media screen and (max-width: $breakpoint-md - 1px) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == lg {
+    @media screen and (max-width: $breakpoint-lg - 1px) {
+      display: none !important;
+    }
+  }
+  @if $breakpoint == xl {
+    @media screen and (max-width: $breakpoint-xl - 1px) {
+      display: none !important;
+    }
+  }
+}
+@each $breakpoint in $breakpoints {
+  .hidden-#{$breakpoint} {
+    @include hidden(#{$breakpoint})
+  }
+  .hidden-#{$breakpoint}-and-more {
+    @include hidden-and-more(#{$breakpoint})
+  }
+  .hidden-#{$breakpoint}-and-less {
+    @include hidden-and-less(#{$breakpoint})
+  }
+}
+
+.hidden {
+  visibility: hidden;
+  display: block;
+  height: 0;
+  width: 0;
+}

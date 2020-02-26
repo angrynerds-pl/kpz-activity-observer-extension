@@ -1,0 +1,9 @@
+@import "variables";
+
+::-webkit-scrollbar { width: 6px; height: 3px;}
+::-webkit-scrollbar-button {  background-color: #666; }
+::-webkit-scrollbar-track {  background-color: #646464;}
+::-webkit-scrollbar-track-piece { background-color: mat-color($color-gray, 200);}
+::-webkit-scrollbar-thumb { height: 50px; background-color: mat-color($color-gray, 500); border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #646464;}
+::-webkit-resizer { background-color: #666;}

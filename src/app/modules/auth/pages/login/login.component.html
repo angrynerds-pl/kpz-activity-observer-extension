@@ -1,0 +1,47 @@
+<div class="auth" @fadeIn @fadeOut>
+  <div class="auth__header">
+    <div class="auth__header__title">Login</div>
+  </div>
+  <div class="auth__body">
+    <div class="auth__form">
+      <form #form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <div class="auth__form__controls">
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.email.field"
+              [formGroup]="loginForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.email">
+            </app-input>
+          </div>
+          <div class="form-row">
+            <app-input
+              [disabled]="pending"
+              [formControlNameValue]="formInputs.password.field"
+              [formGroup]="loginForm"
+              [formSubmitted]="isSubmitted"
+              [options]="formInputs.password">
+            </app-input>
+          </div>
+        </div>
+        <div class="auth__form__actions">
+          <app-button class="auth__form__actions__item"
+                      type="submit"
+                      [pending]="pending"
+                      icon="fas fa-sign-in-alt"
+                      label="Zaloguj">
+          </app-button>
+          <div class="divider"></div>
+          <app-button class="auth__form__actions__item"
+                      [disabled]="pending"
+                      buttonType="mat-button"
+                      label="Nie masz konta? Załóż je tutaj!"
+                      [routerLink]="['/register']">
+          </app-button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

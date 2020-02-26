@@ -1,0 +1,57 @@
+<ng-container [ngSwitch]="buttonType">
+  <button *ngSwitchCase="'mat-stroked-button'"
+          class="button"
+          mat-stroked-button
+          [type]="type"
+          [color]="color"
+          [class.invalid]="invalid"
+          [disabled]="disabled || pending">
+    <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'mat-raised-button'"
+          class="button"
+          mat-raised-button
+          [type]="type"
+          [color]="color"
+          [class.invalid]="invalid"
+          [disabled]="disabled || pending">
+    <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'mat-flat-button'"
+          class="button"
+          mat-flat-button
+          [type]="type"
+          [color]="color"
+          [class.invalid]="invalid"
+          [disabled]="disabled || pending">
+    <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'mat-button'"
+          class="button"
+          mat-button
+          [type]="type"
+          [color]="color"
+          [class.invalid]="invalid"
+          [disabled]="disabled || pending">
+    <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'mat-fab'"
+          class="button fab"
+          mat-fab
+          [type]="type"
+          [color]="color"
+          [class.invalid]="invalid"
+          [disabled]="disabled || pending">
+    <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+  </button>
+</ng-container>
+
+<ng-template #buttonContent>
+  <ng-container [ngSwitch]="pending">
+    <app-spinner *ngSwitchCase="true" color="white"></app-spinner>
+    <span *ngSwitchDefault>
+        <i *ngIf="icon" class="{{icon}}"></i>
+      {{label}}<span class="text-danger ml-4" *ngIf="required">*</span>
+      </span>
+  </ng-container>
+</ng-template>
