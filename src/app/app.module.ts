@@ -1,21 +1,19 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CoreModule} from '@app/core/core.module';
-import {SharedModule} from '@app/shared/shared.module';
-import {RouterModule} from '@angular/router';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CoreModule } from "@app/core/core.module";
+import { SharedModule } from "@app/shared/shared.module";
+import { RouterModule } from "@angular/router";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
-import * as Interceptors from './core/interceptors';
-import * as Guards from './core/guards';
+import * as Interceptors from "./core/interceptors";
+import * as Guards from "./core/guards";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -44,5 +42,4 @@ import * as Guards from './core/guards';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

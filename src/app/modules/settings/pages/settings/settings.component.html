@@ -1,1 +1,25 @@
-<p>settings works!</p>
+<div class="menu">
+  <app-button
+    class="menu__item"
+    buttonType="mat-button"
+    label="Zmień adres e-mail"
+    icon="fas fa-envelope"
+    [routerLink]="['/app', 'settings', 'email']"
+  >
+  </app-button>
+  <app-button
+    class="menu__item"
+    buttonType="mat-button"
+    label="Zmień hasło"
+    icon="fas fa-key"
+    [routerLink]="['/app', 'settings', 'password']"
+  >
+  </app-button>
+  <app-button
+    class="menu__item"
+    buttonType="mat-button"
+    label="Powrót"
+    icon="fas fa-backward"
+    [routerLink]="['/app']"
+  ></app-button>
+</div>
