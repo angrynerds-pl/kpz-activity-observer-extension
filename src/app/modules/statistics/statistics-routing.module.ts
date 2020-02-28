@@ -1,14 +1,14 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import * as Pages from './pages';
+import * as Pages from "./pages";
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     children: [
       {
-        path: '',
+        path: "",
         component: Pages.StatisticsComponent
       }
     ]
@@ -20,5 +20,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: []
 })
-export class StatisticsRoutingModule {
-}
+export class StatisticsRoutingModule {}

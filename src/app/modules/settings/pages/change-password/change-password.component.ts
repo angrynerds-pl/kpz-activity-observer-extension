@@ -5,45 +5,34 @@ import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
 
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
+  selector: "app-change-password",
+  templateUrl: "./change-password.component.html",
+  styleUrls: ["./change-password.component.scss"],
   animations: [fadeIn, fadeOut]
 })
-export class RegisterComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
   @ViewChild("form", { static: true }) form: ElementRef;
 
   isSubmitted: boolean;
   pending: boolean;
 
-  registerForm: FormGroup;
+  changePasswordForm: FormGroup;
   formInputs: IInputs = {
-    name: {
-      field: "name",
-      label: "Imię",
-      name: "name",
-      type: "text"
-    },
-    surname: {
-      field: "surname",
-      label: "Nazwisko",
-      name: "surname",
-      type: "text"
-    },
-    email: {
-      field: "email",
-      label: "Email",
-      name: "email",
-      type: "text"
+    currentPassword: {
+      field: "currentPassword",
+      label: "Aktualne hasło",
+      name: "currentPassword",
+      type: "password"
     },
     password: {
       field: "password",
-      label: "Hasło",
+      label: "Nowe hasło",
       name: "password",
       type: "password"
     },
     confirmPassword: {
       field: "confirmPassword",
-      label: "Powtórz hasło",
+      label: "Powtórz nowe hasło",
       name: "confirmPassword",
       type: "password"
     }
@@ -55,13 +44,15 @@ export class RegisterComponent implements OnInit {
   }
 
   initForm() {
-    this.registerForm = this.formBuilder.group(
+    this.changePasswordForm = this.formBuilder.group(
       {
-        name: ["", Validators.compose([Validators.required])],
-        surname: ["", Validators.compose([Validators.required])],
-        email: [
+        currentPassword: [
           "",
-          Validators.compose([Validators.required, Validators.email])
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(8),
+            Validators.maxLength(30)
+          ])
         ],
         password: [
           "",
@@ -91,7 +82,7 @@ export class RegisterComponent implements OnInit {
     const passwordsEqual = password.value === confirmPassword.value;
 
     if (passwordsEqual) {
-      confirmPassword.setErrors(null);
+      confirmPassword.setErrors(confirmPassword.errors);
     } else {
       confirmPassword.setErrors({
         passwordMismatch: true,
@@ -102,8 +93,8 @@ export class RegisterComponent implements OnInit {
 
   submit() {
     this.isSubmitted = true;
-    this.registerForm.markAllAsTouched();
-    if (this.registerForm.invalid || this.pending) {
+    this.changePasswordForm.markAllAsTouched();
+    if (this.changePasswordForm.invalid || this.pending) {
       return;
     }
     this.router.navigate(["/app"]);

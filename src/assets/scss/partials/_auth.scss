@@ -7,7 +7,6 @@
   display: flex;
 
   &__header {
-
     &__title {
       color: mat-color($color-accent, 500);
       justify-content: center;
@@ -16,6 +15,7 @@
       font-weight: 600;
       font-size: 24px;
       display: flex;
+      text-align: center;
     }
   }
 
@@ -25,7 +25,7 @@
 
   &__form {
     flex-direction: column;
-    animation: fadeIn .5s;
+    animation: fadeIn 0.5s;
     margin: 0 2px;
     display: flex;
 

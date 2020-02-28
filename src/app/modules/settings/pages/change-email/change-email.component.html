@@ -1,16 +1,16 @@
 <div class="auth" @fadeIn @fadeOut>
   <div class="auth__header">
-    <div class="auth__header__title">Login</div>
+    <div class="auth__header__title">Zmiana adresu e-mail</div>
   </div>
   <div class="auth__body">
     <div class="auth__form">
-      <form #form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <form #form [formGroup]="changeEmailForm" (ngSubmit)="submit()">
         <div class="auth__form__controls">
           <div class="form-row">
             <app-input
               [disabled]="pending"
               [formControlNameValue]="formInputs.email.field"
-              [formGroup]="loginForm"
+              [formGroup]="changeEmailForm"
               [formSubmitted]="isSubmitted"
               [options]="formInputs.email"
             >
@@ -19,10 +19,10 @@
           <div class="form-row">
             <app-input
               [disabled]="pending"
-              [formControlNameValue]="formInputs.password.field"
-              [formGroup]="loginForm"
+              [formControlNameValue]="formInputs.confirmEmail.field"
+              [formGroup]="changeEmailForm"
               [formSubmitted]="isSubmitted"
-              [options]="formInputs.password"
+              [options]="formInputs.confirmEmail"
             >
             </app-input>
           </div>
@@ -33,16 +33,14 @@
             type="submit"
             [pending]="pending"
             icon="fas fa-sign-in-alt"
-            label="Zaloguj"
+            label="Zmień email"
           >
           </app-button>
-          <div class="divider"></div>
           <app-button
-            class="auth__form__actions__item"
-            [disabled]="pending"
             buttonType="mat-button"
-            label="Nie masz konta? Załóż je tutaj!"
-            [routerLink]="['/register']"
+            label="Anuluj"
+            icon="fas fa-times"
+            [routerLink]="['../']"
           >
           </app-button>
         </div>
