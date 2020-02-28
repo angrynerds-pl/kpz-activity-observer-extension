@@ -14,9 +14,10 @@
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.max">Wartość za duża</mat-error>
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.minlength">Wartość za krótka</mat-error>
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.maxlength">Wartość za długa</mat-error>
-    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.notEquivalent">Wartości nie pasują do siebie</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.valueMismatch">Wartości nie pasują do siebie</mat-error>
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.alreadyAdded">Konto z adresem email już istnieje</mat-error>
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.passwordMismatch">Hasła nie pasują do siebie</mat-error>
+    <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.emailMismatch">Adresy e-mail nie pasują do siebie</mat-error>
     <mat-error *ngIf="formSubmitted && formGroup.controls[formControlNameValue].errors && formGroup.controls[formControlNameValue].errors.usernameTaken">Ta nazwa użytkownika jest już zajęta</mat-error>
   </mat-form-field>
   <!-- {{formSubmitted}}  -->

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
+import { FormsService } from "@app/core/services/forms.service";
 
 @Component({
   selector: "app-change-password",
@@ -37,7 +38,11 @@ export class ChangePasswordComponent implements OnInit {
       type: "password"
     }
   };
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private formsService: FormsService
+  ) {}
 
   ngOnInit() {
     this.initForm();
@@ -71,7 +76,15 @@ export class ChangePasswordComponent implements OnInit {
           ])
         ]
       },
-      { validator: this.checkPasswords }
+      {
+        validators: [
+          this.formsService.checkIfValuesMatching(
+            "password",
+            "confirmPassword",
+            "password"
+          )
+        ]
+      }
     );
   }
 
