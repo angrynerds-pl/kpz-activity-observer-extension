@@ -97,22 +97,6 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  checkPasswords(control: FormGroup) {
-    const password = control.get("password");
-    const confirmPassword = control.get("confirmPassword");
-
-    const passwordsEqual = password.value === confirmPassword.value;
-
-    if (passwordsEqual) {
-      confirmPassword.setErrors(null);
-    } else {
-      confirmPassword.setErrors({
-        passwordMismatch: true,
-        ...confirmPassword.errors
-      });
-    }
-  }
-
   submit() {
     this.isSubmitted = true;
     this.registerForm.markAllAsTouched();
