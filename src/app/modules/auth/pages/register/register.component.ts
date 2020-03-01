@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
+import { FormsService } from "@app/core/services/forms.service";
 
 @Component({
   selector: "app-register",
@@ -48,7 +49,11 @@ export class RegisterComponent implements OnInit {
       type: "password"
     }
   };
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private formsService: FormsService
+  ) {}
 
   ngOnInit() {
     this.initForm();
@@ -80,24 +85,16 @@ export class RegisterComponent implements OnInit {
           ])
         ]
       },
-      { validator: this.checkPasswords }
+      {
+        validators: [
+          this.formsService.checkIfValuesMatching(
+            "password",
+            "confirmPassword",
+            "password"
+          )
+        ]
+      }
     );
-  }
-
-  checkPasswords(control: FormGroup) {
-    const password = control.get("password");
-    const confirmPassword = control.get("confirmPassword");
-
-    const passwordsEqual = password.value === confirmPassword.value;
-
-    if (passwordsEqual) {
-      confirmPassword.setErrors(null);
-    } else {
-      confirmPassword.setErrors({
-        passwordMismatch: true,
-        ...confirmPassword.errors
-      });
-    }
   }
 
   submit() {

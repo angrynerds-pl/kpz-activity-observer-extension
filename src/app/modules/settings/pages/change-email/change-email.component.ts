@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
+import { FormsService } from "@app/core/services/forms.service";
 
 @Component({
   selector: "app-change-email",
@@ -31,20 +32,38 @@ export class ChangeEmailComponent implements OnInit {
       type: "email"
     }
   };
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private formsService: FormsService
+  ) {}
 
   ngOnInit() {
     this.initForm();
   }
 
   initForm() {
-    this.changeEmailForm = this.formBuilder.group({
-      email: ["", Validators.compose([Validators.required, Validators.email])],
-      confirmEmail: [
-        "",
-        Validators.compose([Validators.required, Validators.email])
-      ]
-    });
+    this.changeEmailForm = this.formBuilder.group(
+      {
+        email: [
+          "",
+          Validators.compose([Validators.required, Validators.email])
+        ],
+        confirmEmail: [
+          "",
+          Validators.compose([Validators.required, Validators.email])
+        ]
+      },
+      {
+        validators: [
+          this.formsService.checkIfValuesMatching(
+            "email",
+            "confirmEmail",
+            "email"
+          )
+        ]
+      }
+    );
   }
 
   submit() {
