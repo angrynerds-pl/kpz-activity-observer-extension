@@ -1,22 +1,29 @@
-import {HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {catchError, switchMap, filter, take} from 'rxjs/operators';
-import {Observable, throwError, BehaviorSubject, EMPTY} from 'rxjs';
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {MessageService} from '@app/core/services/message.service';
-import {ApiError, User} from '@app/shared/models';
-import {AuthService} from '@app/core/services/auth.service';
-import {environment} from '@env/environment';
+import {
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from "@angular/common/http";
+import { catchError, switchMap, filter, take } from "rxjs/operators";
+import { Observable, throwError, BehaviorSubject, EMPTY } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { MessageService } from "@app/core/services/message.service";
+import { ApiError, User } from "@app/shared/models";
+import { AuthService } from "@app/core/services/auth.service";
+import { environment } from "@env/environment";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<string> = new BehaviorSubject<any>(null);
+  private refreshTokenSubject: BehaviorSubject<string> = new BehaviorSubject<
+    any
+  >(null);
 
-  constructor(public router: Router,
-              private authService: AuthService,
-              private messageService: MessageService) {
-  }
+  constructor(
+    public router: Router,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(
@@ -29,7 +36,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         // Handle invalid token:
-        if (parsedError.name === 'invalidToken') {
+        if (parsedError.name === "invalidToken") {
           return this.refreshToken(request, next);
         }
 
@@ -56,8 +63,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     );
   }
 
-  private addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    return request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
+  private addTokenToRequest(
+    request: HttpRequest<any>,
+    token: string
+  ): HttpRequest<any> {
+    return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   }
 
   private refreshToken(request: HttpRequest<any>, next: HttpHandler) {
@@ -79,31 +89,36 @@ export class ErrorInterceptor implements HttpInterceptor {
         .pipe(
           filter(token => token !== null),
           take(1),
-          switchMap(token => next.handle(this.addTokenToRequest(request, token)))
+          switchMap(token =>
+            next.handle(this.addTokenToRequest(request, token))
+          )
         )
         .pipe(catchError(() => this.handleInvalidRefreshToken()));
     }
   }
 
   private handle401Error() {
-    this.messageService.open('Nieautoryzowany dostęp ✋', 'danger');
+    this.messageService.open("Nieautoryzowany dostęp ✋", "danger");
     this.authService.logout(true);
     return EMPTY;
   }
 
   private handle403Error() {
-    this.messageService.open('Nieautoryzowany dostęp ✋', 'danger');
+    this.messageService.open("Nieautoryzowany dostęp ✋", "danger");
     return EMPTY;
   }
 
   private handle500Error() {
-    this.messageService.open('Wystąpił wewnętrzny błąd serwera 🤖', 'danger');
+    this.messageService.open("Wystąpił wewnętrzny błąd serwera 🤖", "danger");
     return EMPTY;
   }
 
   private handleInvalidRefreshToken() {
     this.isRefreshing = false;
-    this.messageService.open('Niepoprawny token, nastąpiło wylogowanie', 'warning');
+    this.messageService.open(
+      "Niepoprawny token, nastąpiło wylogowanie",
+      "warning"
+    );
     this.authService.logout();
     return EMPTY;
   }

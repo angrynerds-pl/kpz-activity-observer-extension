@@ -21,14 +21,14 @@ export class UserDecodedTokens extends UserTokens {
 }
 
 export class NewUser {
-  firstName: string;
-  lastName: string;
+  name: string;
+  surname: string;
   password: string;
   email: string;
 
   constructor(props?: any) {
-    this.firstName = props.firstName;
-    this.lastName = props.lastName;
+    this.name = props.name;
+    this.surname = props.surname;
     this.password = props.password;
     this.email = props.email;
   }

@@ -6,12 +6,8 @@ export class ApiResponse<T> {
 
 export class ApiError {
   status: number;
-  name: string;
-  errors: {
-    translatedMessage?: string;
-    message: string;
-    param?: string;
-  }[];
+  name?: string;
+  errors?: [];
 
   constructor(error: any) {
     if (error) {

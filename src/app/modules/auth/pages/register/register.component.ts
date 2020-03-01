@@ -4,6 +4,9 @@ import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
 import { FormsService } from "@app/core/services/forms.service";
+import { IdentityApiService } from "@app/core/api/identity-api.service";
+import { MessageService } from "@app/core/services/message.service";
+import { AuthService } from "@app/core/services/auth.service";
 
 @Component({
   selector: "app-register",
@@ -52,7 +55,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private formsService: FormsService
+    private formsService: FormsService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -100,9 +104,33 @@ export class RegisterComponent implements OnInit {
   submit() {
     this.isSubmitted = true;
     this.registerForm.markAllAsTouched();
-    if (this.registerForm.invalid || this.pending) {
+    this.pending = true;
+
+    if (this.registerForm.invalid) {
       return;
     }
-    this.router.navigate(["/app"]);
+    this.authService
+      .register({
+        email: this.registerForm.get("email").value,
+        name: this.registerForm.get("name").value,
+        surname: this.registerForm.get("surname").value,
+        password: this.registerForm.get("password").value
+      })
+      .subscribe(
+        res => {
+          if (res.status === 201) {
+            this.router.navigate(["/"]);
+          }
+        },
+        err => {
+          if (err.errors.indexOf("EMAIL_TAKEN") !== -1) {
+            this.registerForm.get("email").setErrors({ alreadyAdded: true });
+          }
+          this.pending = false;
+        },
+        () => {
+          this.pending = false;
+        }
+      );
   }
 }
