@@ -21,8 +21,7 @@ export class MessageService {
     if (!err.errors) {
       return this.open("Wystąpił nieznany błąd 🤖", "danger");
     }
-    // Tymczasowe pominięcie wyświetlania szczegółowych błędów
-    // API nie jest na razie na tyle zaawansowane
+    // TODO: tłumaczenie kodów błędów z API żeby wyświetlać komunikaty
 
     // err.errors.forEach(item => {
     //   if (errorsToDisplay) {

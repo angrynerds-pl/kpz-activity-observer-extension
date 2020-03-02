@@ -4,9 +4,8 @@ import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
 import { FormsService } from "@app/core/services/forms.service";
-import { IdentityApiService } from "@app/core/api/identity-api.service";
-import { MessageService } from "@app/core/services/message.service";
 import { AuthService } from "@app/core/services/auth.service";
+import { ApiError } from "@app/shared/models";
 
 @Component({
   selector: "app-register",
@@ -77,7 +76,7 @@ export class RegisterComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.minLength(8),
-            Validators.maxLength(30)
+            Validators.maxLength(32)
           ])
         ],
         confirmPassword: [
@@ -85,7 +84,7 @@ export class RegisterComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.minLength(8),
-            Validators.maxLength(30)
+            Validators.maxLength(32)
           ])
         ]
       },
@@ -102,13 +101,12 @@ export class RegisterComponent implements OnInit {
   }
 
   submit() {
-    this.isSubmitted = true;
     this.registerForm.markAllAsTouched();
-    this.pending = true;
-
+    this.isSubmitted = true;
     if (this.registerForm.invalid) {
       return;
     }
+    this.pending = true;
     this.authService
       .register({
         email: this.registerForm.get("email").value,
@@ -122,15 +120,22 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(["/"]);
           }
         },
-        err => {
-          if (err.errors.indexOf("EMAIL_TAKEN") !== -1) {
-            this.registerForm.get("email").setErrors({ alreadyAdded: true });
-          }
-          this.pending = false;
-        },
-        () => {
-          this.pending = false;
+        (err: ApiError) => {
+          err.errors.forEach(error => {
+            if (error.param) {
+              const field = this.registerForm.get(error.param);
+              if (field) {
+                field.setErrors({
+                  [error.message]: true,
+                  ...field.errors
+                });
+              }
+            }
+          });
         }
-      );
+      )
+      .add(() => {
+        this.pending = false;
+      });
   }
 }
