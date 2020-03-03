@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
-  defaultLanguage: 'pl-PL',
-  supportedLanguages: ['pl-PL']
+  apiUrl: "https://activity-observer.herokuapp.com/api",
+  defaultLanguage: "pl-PL",
+  supportedLanguages: ["pl-PL"]
 };
