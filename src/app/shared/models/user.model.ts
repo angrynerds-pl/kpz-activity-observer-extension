@@ -9,8 +9,9 @@ export class UserCredentials {
 }
 
 export class UserTokens {
-  refreshToken: string;
-  token: string;
+  accessToken: string;
+  token?: string;
+  refreshToken?: string;
 }
 
 export class UserDecodedTokens extends UserTokens {

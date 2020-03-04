@@ -38,7 +38,7 @@ export class IdentityApiService {
   }
 
   login(credentials: UserCredentials): Observable<ApiResponse<UserTokens>> {
-    return this.apiService.request(HttpMethod.POST, "identity/login", {
+    return this.apiService.request(HttpMethod.POST, "auth", {
       body: credentials
     });
   }

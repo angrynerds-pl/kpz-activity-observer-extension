@@ -91,19 +91,19 @@ export class AuthService {
       .login(credentials)
       .pipe(
         map(res => {
-          const user = this.decodeAndSaveUser(res.data);
-          this.messageService.open(`Witaj ${user.firstName}! 👋`, "success");
-          return user;
+          // const user = this.decodeAndSaveUser(res.data);
+          this.messageService.open(`Zalogowano pomyślnie`, "success");
+          return res.data;
         })
       )
       .pipe(
         catchError((err: ApiError) => {
-          const errorsToDisplay = [
-            "invalidPassword",
-            "userDontExist",
-            "invalidEmailOrPassword"
-          ];
-          this.messageService.openErrors(err, errorsToDisplay);
+          // const errorsToDisplay = [
+          //   "invalidPassword",
+          //   "userDontExist",
+          //   "invalidEmailOrPassword"
+          // ];
+          this.messageService.open("Ups, coś poszło nie tak!", "warning");
           return throwError(err);
         })
       );
