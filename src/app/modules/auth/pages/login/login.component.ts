@@ -5,6 +5,7 @@ import { fadeIn, fadeOut } from "@app/shared/animations";
 import { Router } from "@angular/router";
 import { AuthService } from "@app/core/services/auth.service";
 import { ApiError } from "@app/shared/models/api.model";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
@@ -40,6 +41,9 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.authService.currentUser) {
+      this.router.navigateByUrl("/app");
+    }
     this.initForm();
   }
 
