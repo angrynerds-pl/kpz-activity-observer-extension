@@ -1,4 +1,7 @@
 <div class="menu">
+  <div *ngIf='name' class="menu-header" @fadeIn>
+    Witaj, {{ name }}!
+  </div>
   <app-button
     class="menu__item"
     buttonType="mat-button"
@@ -20,7 +23,7 @@
     buttonType="mat-button"
     label="Wyloguj"
     icon="fas fa-sign-out-alt"
-    [routerLink]="['/']"
+    (click)='logout()'
   >
   </app-button>
 </div>
