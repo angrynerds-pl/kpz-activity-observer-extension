@@ -36,9 +36,13 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         // Handle invalid token:
-        if (parsedError.name === "invalidToken") {
-          return this.refreshToken(request, next);
-        }
+        parsedError.errors.forEach(error => {
+          if (error.param === "token") {
+            if (error.message === "INVALID_TOKEN") {
+              return this.handleInvalidAccessToken();
+            }
+          }
+        });
 
         // && this.authService.currentUser
         // TODO: Handle refresh token
@@ -71,30 +75,30 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   private refreshToken(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
-      return this.authService
-        .refreshToken()
-        .pipe(
-          switchMap((user: User) => {
-            this.refreshTokenSubject.next(user.token);
-            this.isRefreshing = false;
-            return next.handle(this.addTokenToRequest(request, user.token));
-          })
-        )
-        .pipe(catchError(() => this.handleInvalidRefreshToken()));
-    } else {
-      return this.refreshTokenSubject
-        .pipe(
-          filter(token => token !== null),
-          take(1),
-          switchMap(token =>
-            next.handle(this.addTokenToRequest(request, token))
-          )
-        )
-        .pipe(catchError(() => this.handleInvalidRefreshToken()));
-    }
+    // if (!this.isRefreshing) {
+    //   this.isRefreshing = true;
+    //   this.refreshTokenSubject.next(null);
+    //   return this.authService
+    //     .refreshToken()
+    //     .pipe(
+    //       switchMap((user: User) => {
+    //         this.refreshTokenSubject.next(user.token);
+    //         this.isRefreshing = false;
+    //         return next.handle(this.addTokenToRequest(request, user.token));
+    //       })
+    //     )
+    //     .pipe(catchError(() => this.handleInvalidRefreshToken()));
+    // } else {
+    //   return this.refreshTokenSubject
+    //     .pipe(
+    //       filter(token => token !== null),
+    //       take(1),
+    //       switchMap(token =>
+    //         next.handle(this.addTokenToRequest(request, token))
+    //       )
+    //     )
+    //     .pipe(catchError(() => this.handleInvalidRefreshToken()));
+    // }
   }
 
   private handle401Error() {
@@ -110,6 +114,12 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private handle500Error() {
     this.messageService.open("Wystąpił wewnętrzny błąd serwera 🤖", "danger");
+    return EMPTY;
+  }
+
+  private handleInvalidAccessToken() {
+    this.messageService.open("Sesja wygasła, wylogowywanie!", "warning");
+    this.authService.logout(true);
     return EMPTY;
   }
 

@@ -9,15 +9,15 @@ export class UserCredentials {
 }
 
 export class UserTokens {
-  refreshToken: string;
-  token: string;
+  accessToken: string;
 }
 
 export class UserDecodedTokens extends UserTokens {
-  firstName: string;
-  lastName: string;
+  // firstName: string;
+  // lastName: string;
   email: string;
-  id: string;
+  _id: string;
+  accessToken: string;
 }
 
 export class NewUser {
@@ -35,14 +35,16 @@ export class NewUser {
 }
 
 export class User {
-  firstName: string;
-  lastName: string;
-  refreshToken: string;
-  token: string;
+  // name: string;
+  // surname: string;
+  // refreshToken: string;
+  accessToken: string;
   email: string;
   id: string;
 
   constructor(props: Partial<UserDecodedTokens>) {
+    this.id = props._id;
+    delete props._id;
     Object.assign(this, props);
   }
 }

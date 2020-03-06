@@ -28,9 +28,9 @@ export class AuthService {
     private router: Router
   ) {
     this.jwt = new JwtHelperService();
-    this.currentUser$ = new BehaviorSubject<User>(
-      JSON.parse(localStorage.getItem("currentUser") || null)
-    );
+    const user = JSON.parse(localStorage.getItem("currentUser") || null);
+
+    this.currentUser$ = new BehaviorSubject<User>(user);
     this.currentUser$.subscribe(res => {
       this.currentUser = res;
     });
@@ -41,12 +41,12 @@ export class AuthService {
     this.currentUser$.next(user);
   }
 
-  decodeAndSaveUser({ refreshToken, token }: UserTokens) {
+  decodeAndSaveUser({ accessToken }: UserTokens) {
     let decodedToken;
     let newUser;
     try {
-      decodedToken = this.jwt.decodeToken(token);
-      newUser = new User({ refreshToken, token, ...decodedToken });
+      decodedToken = this.jwt.decodeToken(accessToken);
+      newUser = new User({ accessToken, ...decodedToken });
       this.saveUser(newUser);
     } catch (err) {
       this.messageService.open("Nieprawidłowy token", "danger");
@@ -55,12 +55,12 @@ export class AuthService {
   }
 
   refreshToken() {
-    const { refreshToken } = this.currentUser;
-    return this.identityApi.refresh(refreshToken).pipe(
-      map(res => {
-        return this.decodeAndSaveUser(res.data);
-      })
-    );
+    // const { refreshToken } = this.currentUser;
+    // return this.identityApi.refresh(refreshToken).pipe(
+    //   map(res => {
+    //     return this.decodeAndSaveUser(res.data);
+    //   })
+    // );
   }
 
   register(newUser: NewUser) {
@@ -92,18 +92,18 @@ export class AuthService {
       .pipe(
         map(res => {
           const user = this.decodeAndSaveUser(res.data);
-          this.messageService.open(`Witaj ${user.firstName}! 👋`, "success");
-          return user;
+          this.messageService.open(`Zalogowano: ${user.email}`, "success");
+          return res.data;
         })
       )
       .pipe(
         catchError((err: ApiError) => {
-          const errorsToDisplay = [
-            "invalidPassword",
-            "userDontExist",
-            "invalidEmailOrPassword"
-          ];
-          this.messageService.openErrors(err, errorsToDisplay);
+          // const errorsToDisplay = [
+          //   "invalidPassword",
+          //   "userDontExist",
+          //   "invalidEmailOrPassword"
+          // ];
+          this.messageService.open("Ups, coś poszło nie tak!", "warning");
           return throwError(err);
         })
       );

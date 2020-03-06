@@ -1,17 +1,18 @@
-import {Injectable} from '@angular/core';
-import {ApiService} from '@app/core/api/api.service';
-import {Observable} from 'rxjs';
-import {ApiResponse, Pagination} from '@app/shared/models';
-import {HttpMethod} from '@app/shared/enums';
+import { Injectable } from "@angular/core";
+import { ApiService } from "@app/core/api/api.service";
+import { Observable } from "rxjs";
+import { ApiResponse, Pagination, User } from "@app/shared/models";
+import { HttpMethod } from "@app/shared/enums";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class AppApiService {
+  constructor(private apiService: ApiService) {}
 
-  constructor(private apiService: ApiService) {
+  getUser() {
+    return this.apiService.request(HttpMethod.GET, "users/me");
   }
-
   // GET:
   // getApps({pageSize, pageNumber}: Pagination): Observable<ApiResponse<SimplifiedApplication[]>> {
   //   return this.apiService.request(
