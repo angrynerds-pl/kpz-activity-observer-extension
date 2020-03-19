@@ -13,6 +13,9 @@ export class AppApiService {
   getUser() {
     return this.apiService.request(HttpMethod.GET, "users/me");
   }
+  getStatistics() {
+    return this.apiService.request(HttpMethod.GET, "sites/me");
+  }
   // GET:
   // getApps({pageSize, pageNumber}: Pagination): Observable<ApiResponse<SimplifiedApplication[]>> {
   //   return this.apiService.request(

@@ -1,4 +1,8 @@
-<div>
+<div class='statistics-container'>
+  <div *ngIf='!loaded' class='spinner-container'>
+    <mat-spinner color="accent"></mat-spinner>
+  </div>
+ 
   <ngx-charts-pie-chart
     [view]="[250, 400]"
     [scheme]=""
@@ -9,9 +13,11 @@
     [labels]="false"
     [doughnut]="true"
     [animations]="true"
+    [legendTitle]="'Legenda'"
     (select)="onSelect($event)"
     (activate)="onActivate($event)"
     (deactivate)="onDeactivate($event)"
+    *ngIf='loaded'
   >
   </ngx-charts-pie-chart>
   <app-button
