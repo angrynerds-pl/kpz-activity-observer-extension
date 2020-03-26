@@ -9,20 +9,29 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 })
 export class StatisticsComponent implements OnInit {
   single: any[] = [];
+  visits: any[] = [];
+  times: any[] = [];
+  visitsShown: boolean;
   loaded = false;
 
   constructor(private appApiService: AppApiService) {}
 
   ngOnInit() {
     this.appApiService.getStatistics().subscribe(response => {
-      const holder = [];
+      this.visits = [];
+      this.times = [];
       response.data.forEach(site => {
-        holder.push({
+        this.visits.push({
           name: site.url,
-          value: site.timestamps.length
+          value: site.visits
+        });
+        this.times.push({
+          name: site.url,
+          value: site.time
         });
       });
-      this.single = holder;
+      this.single = this.visits;
+      this.visitsShown = true;
       this.loaded = true;
     });
   }
@@ -37,5 +46,15 @@ export class StatisticsComponent implements OnInit {
 
   onDeactivate(data): void {
     console.log("Deactivate", JSON.parse(JSON.stringify(data)));
+  }
+
+  showVisits(): void {
+    this.single = this.visits;
+    this.visitsShown = true;
+  }
+
+  showTimes(): void {
+    this.single = this.times;
+    this.visitsShown = false;
   }
 }
