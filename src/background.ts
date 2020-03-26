@@ -7,12 +7,40 @@ class Site {
   recordID?: string;
   tabId?: number;
   windowId?: number;
+  sent = false;
 
   constructor(url, startTime, tabId, windowId) {
     this.url = url;
     this.startTime = startTime;
     this.tabId = tabId;
     this.windowId = windowId;
+  }
+
+  static copy(site: Site) {
+    const newSite = new Site(
+      site.url,
+      site.startTime,
+      site.tabId,
+      site.windowId
+    );
+    newSite.endTime = site.endTime;
+    newSite.recordID = site.recordID;
+    return newSite;
+  }
+
+  toJSON() {
+    const json = {
+      url: this.url,
+      startTime: this.startTime
+    };
+    if (this.endTime) {
+      Object.assign(json, { endTime: this.endTime });
+    }
+    if (this.recordID) {
+      Object.assign(json, { recordID: this.recordID });
+    }
+
+    return json;
   }
 }
 
@@ -47,6 +75,9 @@ function postSite(site: Site): Promise<any> {
           response
             .json()
             .then(json => {
+              if (site.endTime) {
+                site.sent = true;
+              }
               site.recordID = json.recordID;
               return resolve({
                 recordID: json.recordID
@@ -83,10 +114,25 @@ function patchSite(site: Site): Promise<any> {
     })
       .then(response => {
         if (response.status >= 200 && response.status < 300) {
+          site.sent = true;
           return resolve();
         } else {
-          console.error(response);
-          return reject();
+          response.json().then(json => {
+            json.errors.forEach(error => {
+              if (
+                error.param === "token" &&
+                error.message === "INVALID_TOKEN"
+              ) {
+                chrome.browserAction.setBadgeBackgroundColor({
+                  color: "#ff0000"
+                });
+                chrome.browserAction.setBadgeText({
+                  text: "!"
+                });
+              }
+              return reject();
+            });
+          });
         }
       })
       .catch(error => {
@@ -97,6 +143,9 @@ function patchSite(site: Site): Promise<any> {
 
 function sendSite(site: Site) {
   return new Promise((resolve, reject) => {
+    if (site.sent === true) {
+      return resolve();
+    }
     if (site.url.trim() === "") {
       return reject(new Error("Site has empty URL"));
     }
@@ -148,14 +197,14 @@ function handleTabChange(tab: chrome.tabs.Tab) {
 
 function handleClose() {
   console.log("REMOVED", currentSite);
-  sendSite(currentSite).then(
+  const siteToSend = Site.copy(currentSite);
+  currentSite = null;
+  sendSite(siteToSend).then(
     () => {
-      currentSite = null;
       localStorage.removeItem("lastSite");
     },
     error => {
       console.error(error);
-      currentSite = null;
     }
   );
 }
@@ -205,9 +254,9 @@ function init() {
       });
       chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
         if (currentSite !== null && currentSite !== undefined) {
-          currentSite.endTime = new Date();
-          localStorage.setItem("lastSite", JSON.stringify(currentSite));
           if (currentSite.tabId === tabId) {
+            currentSite.endTime = new Date();
+            localStorage.setItem("lastSite", JSON.stringify(currentSite));
             handleClose();
           }
         }
@@ -215,9 +264,9 @@ function init() {
 
       chrome.windows.onRemoved.addListener(windowId => {
         if (currentSite !== null && currentSite !== undefined) {
-          currentSite.endTime = new Date();
-          localStorage.setItem("lastSite", JSON.stringify(currentSite));
           if (currentSite.windowId === windowId) {
+            currentSite.endTime = new Date();
+            localStorage.setItem("lastSite", JSON.stringify(currentSite));
             handleClose();
           }
         }
