@@ -1,3 +1,4 @@
+@import "../../../../../assets/scss/variables";
 .statistics-container {
   display: flex;
   width: 100%;
@@ -12,4 +13,25 @@
   align-items: center;
   align-content: center;
   height: 100%;
+}
+
+.statistics-selectors {
+  display: flex;
+  justify-content: stretch;
+}
+
+.statistics-selector {
+  text-align: center;
+  font-size: 1.5em;
+  padding: 0.5em;
+  cursor: pointer;
+  width: 100%;
+}
+
+.statistics-selector:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.statistics-selector.active {
+  border-bottom: 4px solid map-get($color-accent, 900);
 }

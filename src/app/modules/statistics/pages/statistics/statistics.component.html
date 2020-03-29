@@ -1,4 +1,8 @@
 <div class='statistics-container'>
+  <div class="statistics-selectors">
+    <div (click)="showVisits()" class='statistics-selector' [ngClass]="{'active': visitsShown === true }">Wizyty</div>
+    <div (click)="showTimes()" class='statistics-selector'[ngClass]="{'active': visitsShown === false}">Czas</div>
+  </div>
   <div *ngIf='!loaded' class='spinner-container'>
     <mat-spinner color="accent"></mat-spinner>
   </div>
