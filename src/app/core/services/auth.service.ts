@@ -109,6 +109,26 @@ export class AuthService {
       );
   }
 
+  update(userData) {
+    return this.identityApi
+      .update(userData)
+      .pipe(
+        map(res => {
+          this.messageService.open(
+            "Zaktualizowano dane użytkownika!",
+            "success"
+          );
+          return true;
+        })
+      )
+      .pipe(
+        catchError((err: ApiError) => {
+          this.messageService.open("Ups, coś poszło nie tak!", "warning");
+          return throwError(err);
+        })
+      );
+  }
+
   logout(withoutMessage?: boolean) {
     localStorage.removeItem("currentUser");
     this.currentUser$.next(null);

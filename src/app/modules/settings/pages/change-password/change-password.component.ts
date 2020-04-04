@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import { IInputs } from "@app/shared/interfaces";
 import { fadeIn, fadeOut } from "@app/shared/animations";
 import { FormsService } from "@app/core/services/forms.service";
+import { AuthService } from "@app/core/services/auth.service";
+import { ApiError } from "@app/shared/models";
 
 @Component({
   selector: "app-change-password",
@@ -41,7 +43,8 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private formsService: FormsService
+    private formsService: FormsService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -51,14 +54,6 @@ export class ChangePasswordComponent implements OnInit {
   initForm() {
     this.changePasswordForm = this.formBuilder.group(
       {
-        currentPassword: [
-          "",
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(30)
-          ])
-        ],
         password: [
           "",
           Validators.compose([
@@ -94,6 +89,31 @@ export class ChangePasswordComponent implements OnInit {
     if (this.changePasswordForm.invalid || this.pending) {
       return;
     }
-    this.router.navigate(["/app"]);
+    this.pending = true;
+    this.authService
+      .update({
+        password: this.changePasswordForm.get("password").value
+      })
+      .subscribe(
+        res => {
+          this.router.navigate(["/app"]);
+        },
+        (err: ApiError) => {
+          err.errors.forEach(error => {
+            if (error.param) {
+              const field = this.changePasswordForm.get(error.param);
+              if (field) {
+                field.setErrors({
+                  [error.message]: true,
+                  ...field.errors
+                });
+              }
+            }
+          });
+        }
+      )
+      .add(() => {
+        this.pending = false;
+      });
   }
 }
