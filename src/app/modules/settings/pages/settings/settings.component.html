@@ -2,6 +2,13 @@
   <app-button
     class="menu__item"
     buttonType="mat-button"
+    label="Zmień imię i nazwisko"
+    icon="fas fa-user"
+    [routerLink]="['/app', 'settings', 'name']"
+  ></app-button>
+  <app-button
+    class="menu__item"
+    buttonType="mat-button"
     label="Zmień adres e-mail"
     icon="fas fa-envelope"
     [routerLink]="['/app', 'settings', 'email']"
