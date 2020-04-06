@@ -11,7 +11,7 @@ import { ApiError } from "@app/shared/models";
   selector: "app-change-password",
   templateUrl: "./change-password.component.html",
   styleUrls: ["./change-password.component.scss"],
-  animations: [fadeIn, fadeOut]
+  animations: [fadeIn, fadeOut],
 })
 export class ChangePasswordComponent implements OnInit {
   @ViewChild("form", { static: true }) form: ElementRef;
@@ -21,24 +21,18 @@ export class ChangePasswordComponent implements OnInit {
 
   changePasswordForm: FormGroup;
   formInputs: IInputs = {
-    currentPassword: {
-      field: "currentPassword",
-      label: "Aktualne hasło",
-      name: "currentPassword",
-      type: "password"
-    },
     password: {
       field: "password",
       label: "Nowe hasło",
       name: "password",
-      type: "password"
+      type: "password",
     },
     confirmPassword: {
       field: "confirmPassword",
       label: "Powtórz nowe hasło",
       name: "confirmPassword",
-      type: "password"
-    }
+      type: "password",
+    },
   };
   constructor(
     private formBuilder: FormBuilder,
@@ -59,17 +53,17 @@ export class ChangePasswordComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.minLength(8),
-            Validators.maxLength(30)
-          ])
+            Validators.maxLength(30),
+          ]),
         ],
         confirmPassword: [
           "",
           Validators.compose([
             Validators.required,
             Validators.minLength(8),
-            Validators.maxLength(30)
-          ])
-        ]
+            Validators.maxLength(30),
+          ]),
+        ],
       },
       {
         validators: [
@@ -77,8 +71,8 @@ export class ChangePasswordComponent implements OnInit {
             "password",
             "confirmPassword",
             "password"
-          )
-        ]
+          ),
+        ],
       }
     );
   }
@@ -92,20 +86,20 @@ export class ChangePasswordComponent implements OnInit {
     this.pending = true;
     this.authService
       .update({
-        password: this.changePasswordForm.get("password").value
+        password: this.changePasswordForm.get("password").value,
       })
       .subscribe(
-        res => {
+        (res) => {
           this.router.navigate(["/app"]);
         },
         (err: ApiError) => {
-          err.errors.forEach(error => {
+          err.errors.forEach((error) => {
             if (error.param) {
               const field = this.changePasswordForm.get(error.param);
               if (field) {
                 field.setErrors({
                   [error.message]: true,
-                  ...field.errors
+                  ...field.errors,
                 });
               }
             }
