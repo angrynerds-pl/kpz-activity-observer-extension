@@ -9,8 +9,9 @@ import * as Pages from "./pages";
   declarations: [
     Pages.SettingsComponent,
     Pages.ChangePasswordComponent,
-    Pages.ChangeEmailComponent
+    Pages.ChangeEmailComponent,
+    Pages.ChangeNameComponent,
   ],
-  imports: [CommonModule, SharedModule, SettingsRoutingModule]
+  imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })
 export class SettingsModule {}

@@ -9,23 +9,27 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        component: Pages.SettingsComponent
+        component: Pages.SettingsComponent,
       },
       {
         path: "password",
-        component: Pages.ChangePasswordComponent
+        component: Pages.ChangePasswordComponent,
       },
       {
         path: "email",
-        component: Pages.ChangeEmailComponent
-      }
-    ]
-  }
+        component: Pages.ChangeEmailComponent,
+      },
+      {
+        path: "name",
+        component: Pages.ChangeNameComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class SettingsRoutingModule {}

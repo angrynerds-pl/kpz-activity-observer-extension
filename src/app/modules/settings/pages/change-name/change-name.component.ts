@@ -8,30 +8,30 @@ import { AuthService } from "@app/core/services/auth.service";
 import { ApiError } from "@app/shared/models";
 
 @Component({
-  selector: "app-change-password",
-  templateUrl: "./change-password.component.html",
-  styleUrls: ["./change-password.component.scss"],
+  selector: "app-change-name",
+  templateUrl: "./change-name.component.html",
+  styleUrls: ["./change-name.component.scss"],
   animations: [fadeIn, fadeOut],
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangeNameComponent implements OnInit {
   @ViewChild("form", { static: true }) form: ElementRef;
 
   isSubmitted: boolean;
   pending: boolean;
 
-  changePasswordForm: FormGroup;
+  changeNameForm: FormGroup;
   formInputs: IInputs = {
-    password: {
-      field: "password",
-      label: "Nowe hasło",
-      name: "password",
-      type: "password",
+    name: {
+      field: "name",
+      label: "Nowe imię",
+      name: "name",
+      type: "text",
     },
-    confirmPassword: {
-      field: "confirmPassword",
-      label: "Powtórz nowe hasło",
-      name: "confirmPassword",
-      type: "password",
+    surname: {
+      field: "surname",
+      label: "Nowe nazwisko",
+      name: "surname",
+      type: "text",
     },
   };
   constructor(
@@ -46,47 +46,23 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   initForm() {
-    this.changePasswordForm = this.formBuilder.group(
-      {
-        password: [
-          "",
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(30),
-          ]),
-        ],
-        confirmPassword: [
-          "",
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(30),
-          ]),
-        ],
-      },
-      {
-        validators: [
-          this.formsService.checkIfValuesMatching(
-            "password",
-            "confirmPassword",
-            "password"
-          ),
-        ],
-      }
-    );
+    this.changeNameForm = this.formBuilder.group({
+      name: [""],
+      surname: [""],
+    });
   }
 
   submit() {
     this.isSubmitted = true;
-    this.changePasswordForm.markAllAsTouched();
-    if (this.changePasswordForm.invalid || this.pending) {
+    this.changeNameForm.markAllAsTouched();
+    if (this.changeNameForm.invalid || this.pending) {
       return;
     }
     this.pending = true;
     this.authService
       .update({
-        password: this.changePasswordForm.get("password").value,
+        name: this.changeNameForm.get("name").value,
+        surname: this.changeNameForm.get("surname").value,
       })
       .subscribe(
         (res) => {
@@ -95,7 +71,7 @@ export class ChangePasswordComponent implements OnInit {
         (err: ApiError) => {
           err.errors.forEach((error) => {
             if (error.param) {
-              const field = this.changePasswordForm.get(error.param);
+              const field = this.changeNameForm.get(error.param);
               if (field) {
                 field.setErrors({
                   [error.message]: true,

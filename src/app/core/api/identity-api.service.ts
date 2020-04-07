@@ -43,5 +43,11 @@ export class IdentityApiService {
     });
   }
 
+  update(userData): Observable<any> {
+    return this.apiService.request(HttpMethod.PATCH, "users", {
+      body: userData
+    });
+  }
+
   // DELETE:
 }
