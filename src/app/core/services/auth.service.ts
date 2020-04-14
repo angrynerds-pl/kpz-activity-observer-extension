@@ -6,7 +6,7 @@ import {
   NewUser,
   User,
   UserCredentials,
-  UserTokens
+  UserTokens,
 } from "@app/shared/models";
 import { IdentityApiService } from "@app/core/api/identity-api.service";
 import { MessageService } from "@app/core/services/message.service";
@@ -14,7 +14,7 @@ import { catchError, map } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AuthService {
   currentUser$: BehaviorSubject<User>;
@@ -31,7 +31,7 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem("currentUser") || null);
 
     this.currentUser$ = new BehaviorSubject<User>(user);
-    this.currentUser$.subscribe(res => {
+    this.currentUser$.subscribe((res) => {
       this.currentUser = res;
     });
   }
@@ -39,6 +39,10 @@ export class AuthService {
   saveUser(user: User) {
     localStorage.setItem("currentUser", JSON.stringify(user));
     this.currentUser$.next(user);
+    chrome.runtime.sendMessage({
+      event: "user-log-in",
+      user,
+    });
   }
 
   decodeAndSaveUser({ accessToken }: UserTokens) {
@@ -67,7 +71,7 @@ export class AuthService {
     return this.identityApi
       .register(newUser)
       .pipe(
-        map(res => {
+        map((res) => {
           this.messageService.open(
             "Utworzono konto, możesz się teraz zalogować!",
             "success"
@@ -90,7 +94,7 @@ export class AuthService {
     return this.identityApi
       .login(credentials)
       .pipe(
-        map(res => {
+        map((res) => {
           const user = this.decodeAndSaveUser(res.data);
           this.messageService.open(`Zalogowano: ${user.email}`, "success");
           return res.data;
@@ -110,6 +114,10 @@ export class AuthService {
   }
 
   logout(withoutMessage?: boolean) {
+    chrome.runtime.sendMessage({
+      event: "user-log-out",
+      user: this.currentUser,
+    });
     localStorage.removeItem("currentUser");
     this.currentUser$.next(null);
     if (!withoutMessage) {
