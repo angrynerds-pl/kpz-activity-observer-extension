@@ -31,7 +31,7 @@ class Site {
   toJSON() {
     const json = {
       url: this.url,
-      startTime: this.startTime
+      startTime: this.startTime,
     };
     if (this.endTime) {
       Object.assign(json, { endTime: this.endTime });
@@ -55,79 +55,85 @@ function updateUser() {
   return JSON.parse(localStorage.getItem("currentUser"));
 }
 
-function postSite(site: Site): Promise<any> {
+function postSite(site: Site, userOverride = null): Promise<any> {
   return new Promise((resolve, reject) => {
-    console.log("POST", site);
-    user = updateUser();
-    if (!user) {
-      return reject(new Error("User not logged in"));
+    if (!userOverride) {
+      user = updateUser();
+    } else {
+      user = userOverride;
     }
+    if (!user) {
+      return reject("User not logged in");
+    }
+
     fetch(`${environment.apiUrl}/sites`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-auth-token": user.accessToken
+        "x-auth-token": user.accessToken,
       },
-      body: JSON.stringify(site)
+      body: JSON.stringify(site),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           response
             .json()
-            .then(json => {
+            .then((json) => {
               if (site.endTime) {
                 site.sent = true;
               }
               site.recordID = json.recordID;
               return resolve({
-                recordID: json.recordID
+                recordID: json.recordID,
               });
             })
-            .catch(error => {
+            .catch((error) => {
               return reject(error);
             });
         } else {
-          console.error(response);
           return reject();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return reject(error);
       });
   });
 }
 
-function patchSite(site: Site): Promise<any> {
+function patchSite(site: Site, userOverride = null): Promise<any> {
   return new Promise((resolve, reject) => {
-    console.log("PATCH", site);
-    user = updateUser();
+    if (!userOverride) {
+      user = updateUser();
+    } else {
+      user = userOverride;
+    }
     if (!user) {
-      return reject(new Error("User not logged in"));
+      return reject("User not logged in");
     }
     fetch(`${environment.apiUrl}/sites`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
-        "x-auth-token": user.accessToken
+        "x-auth-token": user.accessToken,
       },
-      body: JSON.stringify(site)
+      body: JSON.stringify(site),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           site.sent = true;
           return resolve();
         } else {
-          response.json().then(json => {
-            json.errors.forEach(error => {
+          response.json().then((json) => {
+            json.errors.forEach((error) => {
               if (
                 error.param === "token" &&
                 error.message === "INVALID_TOKEN"
               ) {
                 chrome.browserAction.setBadgeBackgroundColor({
-                  color: "#ff0000"
+                  color: "#ff0000",
                 });
                 chrome.browserAction.setBadgeText({
-                  text: "!"
+                  text: "!",
                 });
               }
               return reject();
@@ -135,76 +141,76 @@ function patchSite(site: Site): Promise<any> {
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return reject(error);
       });
   });
 }
 
-function sendSite(site: Site) {
+function sendSite(site: Site, userOverride = null) {
   return new Promise((resolve, reject) => {
     if (site.sent === true) {
       return resolve();
     }
     if (site.url.trim() === "") {
-      return reject(new Error("Site has empty URL"));
+      return reject("Site has empty URL");
+    }
+    if (site.url.trim().startsWith("chrome://")) {
+      return reject("Site has chrome:// URL");
     }
     if (site.recordID) {
       if (!site.endTime) {
         site.endTime = new Date();
       }
-      patchSite(site).then(
+      patchSite(site, userOverride).then(
         () => {
           return resolve();
         },
-        error => reject(error)
+        (error) => reject(error)
       );
     } else {
-      postSite(site).then(
-        response => {
+      postSite(site, userOverride).then(
+        (response) => {
           site.recordID = response.recordID;
-          console.log("AFTER POST", currentSite);
+          if (currentSite === null || currentSite === undefined) {
+            currentSite = site;
+          }
           return resolve(site);
         },
-        error => reject(error)
+        (error) => reject(error)
       );
     }
   });
 }
 
 function handleTabChange(tab: chrome.tabs.Tab) {
-  console.log("handleTabChange", tab, currentSite);
-  if (tab.url.trim() === "") {
-    return;
-  }
-  if (tab.active) {
+  if (tab.active && tab.url.trim() !== "") {
     if (currentSite !== undefined && currentSite !== null) {
       if (tab.url !== currentSite.url) {
         currentSite.endTime = new Date();
         sendSite(currentSite)
-          .then(() => {
+          .finally(() => {
             currentSite = new Site(tab.url, new Date(), tab.id, tab.windowId);
             return sendSite(currentSite);
           })
-          .catch(console.error);
+          .catch(console.warn);
       }
     } else {
       currentSite = new Site(tab.url, new Date(), tab.id, tab.windowId);
-      sendSite(currentSite).then(null, console.error);
+      sendSite(currentSite).then(null, console.warn);
     }
   }
 }
 
-function handleClose() {
-  console.log("REMOVED", currentSite);
+function handleClose(userOverride = null) {
   const siteToSend = Site.copy(currentSite);
   currentSite = null;
-  sendSite(siteToSend).then(
+  sendSite(siteToSend, userOverride).then(
     () => {
       localStorage.removeItem("lastSite");
     },
-    error => {
-      console.error(error);
+    (error) => {
+      console.warn(error);
     }
   );
 }
@@ -215,18 +221,21 @@ function init() {
   if (lastSite) {
     sendSite(lastSite)
       .then(() => {
-        console.log("SENT LAST SITE");
         localStorage.removeItem("lastSite");
       })
-      .catch(console.error);
+      .catch(console.warn);
   }
 
   chrome.tabs.query(
     {
-      active: true
+      active: true,
     },
-    tabs => {
-      if (tabs[0] && tabs[0].url.trim() !== "") {
+    (tabs) => {
+      if (
+        tabs[0] &&
+        tabs[0].url.trim() !== "" &&
+        !tabs[0].url.trim().startsWith("chrome://")
+      ) {
         currentSite = new Site(
           tabs[0].url,
           new Date(),
@@ -236,19 +245,16 @@ function init() {
         sendSite(currentSite);
       }
 
-      chrome.tabs.onCreated.addListener(tab => {
-        console.log("CREATED", tab, currentSite);
+      chrome.tabs.onCreated.addListener((tab) => {
         handleTabChange(tab);
       });
       chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         if (changeInfo.status === "complete") {
-          console.log("UPDATED", tab, currentSite);
           handleTabChange(tab);
         }
       });
-      chrome.tabs.onActivated.addListener(activeInfo => {
-        chrome.tabs.get(activeInfo.tabId, tab => {
-          console.log("ACTIVATED", tab, currentSite);
+      chrome.tabs.onActivated.addListener((activeInfo) => {
+        chrome.tabs.get(activeInfo.tabId, (tab) => {
           handleTabChange(tab);
         });
       });
@@ -262,7 +268,7 @@ function init() {
         }
       });
 
-      chrome.windows.onRemoved.addListener(windowId => {
+      chrome.windows.onRemoved.addListener((windowId) => {
         if (currentSite !== null && currentSite !== undefined) {
           if (currentSite.windowId === windowId) {
             currentSite.endTime = new Date();
@@ -276,10 +282,29 @@ function init() {
 }
 
 chrome.runtime.onStartup.addListener(() => {
-  console.log("onStartup");
   init();
 });
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("onInstalled");
   init();
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.event === "user-log-in") {
+    chrome.tabs.query({ active: true }, (nTabs) => {
+      const tab = nTabs[0];
+      if (
+        tab &&
+        tab.url.trim() !== "" &&
+        !tab.url.trim().startsWith("chrome://")
+      ) {
+        currentSite = new Site(tab.url, new Date(), tab.id, tab.windowId);
+        sendSite(currentSite);
+      }
+    });
+  } else if (message.event === "user-log-out") {
+    if (currentSite !== null && currentSite !== undefined) {
+      currentSite.endTime = new Date();
+      handleClose(message.user);
+    }
+  }
 });
